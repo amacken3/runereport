@@ -19,10 +19,6 @@ server/*.db
 server/.venv/
 server/venv/
 
-# Pipenv
-# Keep Pipfile and Pipfile.lock committed
-# Do not ignore them
-
 # Node / React
 client/node_modules/
 client/dist/
