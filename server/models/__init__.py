@@ -6,3 +6,4 @@ bcrypt = Bcrypt()
 
 from .user import User
 from .position import Position
+from .watchlist_item import WatchlistItem
