@@ -1,0 +1,42 @@
+# Environment variables
+server/.env
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Flask / backend
+server/instance/
+server/runereport.db
+server/*.db
+server/.venv/
+server/venv/
+
+# Pipenv
+# Keep Pipfile and Pipfile.lock committed
+# Do not ignore them
+
+# Node / React
+client/node_modules/
+client/dist/
+client/.env
+client/.env.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
