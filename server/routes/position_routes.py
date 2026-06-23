@@ -46,3 +46,72 @@ def create_position():
     db.session.commit()
 
     return jsonify(position.to_dict()), 201
+
+
+@positions_bp.get("/<int:position_id>")
+@jwt_required()
+def get_position(position_id):
+    user_id = int(get_jwt_identity())
+
+    position = Position.query.filter_by(
+        id=position_id,
+        user_id=user_id
+    ).first()
+
+    if not position:
+        return jsonify({"error": "Position not found."}), 404
+
+    return jsonify(position.to_dict()), 200
+
+
+@positions_bp.patch("/<int:position_id>")
+@jwt_required()
+def update_position(position_id):
+    user_id = int(get_jwt_identity())
+    data = request.get_json() or {}
+
+    position = Position.query.filter_by(
+        id=position_id,
+        user_id=user_id
+    ).first()
+
+    if not position:
+        return jsonify({"error": "Position not found."}), 404
+
+    if "item_id" in data:
+        position.item_id = data["item_id"]
+
+    if "item_name" in data:
+        position.item_name = data["item_name"]
+
+    if "quantity" in data:
+        position.quantity = data["quantity"]
+
+    if "buy_price" in data:
+        position.buy_price = data["buy_price"]
+
+    if "notes" in data:
+        position.notes = data["notes"]
+
+    db.session.commit()
+
+    return jsonify(position.to_dict()), 200
+
+
+@positions_bp.delete("/<int:position_id>")
+@jwt_required()
+def delete_position(position_id):
+    user_id = int(get_jwt_identity())
+
+    position = Position.query.filter_by(
+        id=position_id,
+        user_id=user_id
+    ).first()
+
+    if not position:
+        return jsonify({"error": "Position not found."}), 404
+
+    db.session.delete(position)
+    db.session.commit()
+
+    return jsonify({"message": "Position deleted successfully."}), 200
