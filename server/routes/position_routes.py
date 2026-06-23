@@ -6,6 +6,7 @@ from models import db, Position
 
 positions_bp = Blueprint("positions_bp", __name__, url_prefix="/positions")
 
+
 @positions_bp.get("")
 @jwt_required()
 def get_positions():
