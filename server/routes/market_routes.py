@@ -85,6 +85,11 @@ def get_top_movers():
             if not item_info:
                 continue
 
+            item_name = item_info.get("name", "")
+
+            if "bond" in item_name.lower():
+                continue
+
             current_price = latest_item.get("high") or latest_item.get("low")
             average_price = hourly_item.get("avgHighPrice") or hourly_item.get("avgLowPrice")
 
