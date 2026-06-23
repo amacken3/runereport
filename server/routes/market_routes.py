@@ -2,6 +2,7 @@ import requests
 from flask import Blueprint, jsonify, request
 
 from services.market_analysis import build_market_analysis, build_top_movers
+from services.market_timeseries import build_timeseries_analysis
 from services.osrs_api import (
     get_daily_data,
     get_hourly_data,
@@ -95,3 +96,34 @@ def get_market_analysis(item_id):
 
     except requests.RequestException:
         return jsonify({"error": "Unable to fetch market analysis data."}), 502
+    
+
+@market_bp.get("/analysis/<int:item_id>/timeseries")
+def get_market_timeseries_analysis(item_id):
+    timestep = request.args.get("timestep", "24h")
+
+    allowed_timesteps = {"1h", "6h", "24h"}
+
+    if timestep not in allowed_timesteps:
+        return jsonify({
+            "error": "timestep must be one of: 1h, 6h, 24h."
+        }), 400
+
+    try:
+        timeseries_data = get_timeseries_data(item_id, timestep)
+
+        analysis = build_timeseries_analysis(
+            item_id=item_id,
+            timestep=timestep,
+            timeseries_data=timeseries_data
+        )
+
+        if not analysis:
+            return jsonify({
+                "error": "Time-series analysis data not found for this item."
+            }), 404
+
+        return jsonify(analysis), 200
+
+    except requests.RequestException:
+        return jsonify({"error": "Unable to fetch time-series analysis data."}), 502
