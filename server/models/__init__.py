@@ -1,0 +1,9 @@
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+
+db = SQLAlchemy()
+bcrypt = Bcrypt()
+
+from .user import User
+from .position import Position
+from .watchlist_item import WatchlistItem
