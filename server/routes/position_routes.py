@@ -1,5 +1,5 @@
-from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask import Blueprint, jsonify, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from models import db, Position
 
@@ -7,10 +7,37 @@ from models import db, Position
 positions_bp = Blueprint("positions_bp", __name__, url_prefix="/positions")
 
 
+def get_current_user_id():
+    return int(get_jwt_identity())
+
+
+def find_user_position(position_id, user_id):
+    return Position.query.filter_by(
+        id=position_id,
+        user_id=user_id
+    ).first()
+
+
+def validate_position_data(data):
+    required_fields = ["item_id", "item_name", "quantity", "buy_price"]
+
+    missing_fields = [
+        field for field in required_fields
+        if data.get(field) is None or data.get(field) == ""
+    ]
+
+    if missing_fields:
+        return {
+            "error": "item_id, item_name, quantity, and buy_price are required."
+        }
+
+    return None
+
+
 @positions_bp.get("")
 @jwt_required()
 def get_positions():
-    user_id = int(get_jwt_identity())
+    user_id = get_current_user_id()
 
     positions = Position.query.filter_by(user_id=user_id).all()
 
@@ -20,28 +47,22 @@ def get_positions():
 @positions_bp.post("")
 @jwt_required()
 def create_position():
-    user_id = int(get_jwt_identity())
+    user_id = get_current_user_id()
     data = request.get_json() or {}
 
-    item_id = data.get("item_id")
-    item_name = data.get("item_name")
-    quantity = data.get("quantity")
-    buy_price = data.get("buy_price")
-    notes = data.get("notes")
+    validation_error = validate_position_data(data)
 
-    if item_id is None or not item_name or quantity is None or buy_price is None:
-        return jsonify({
-            "error": "item_id, item_name, quantity, and buy_price are required."
-        }), 400
-    
+    if validation_error:
+        return jsonify(validation_error), 400
+
     position = Position(
-            item_id=item_id,
-            item_name=item_name,
-            quantity=quantity,
-            buy_price=buy_price,
-            notes=notes,
-            user_id=user_id
-        )
+        item_id=data.get("item_id"),
+        item_name=data.get("item_name"),
+        quantity=data.get("quantity"),
+        buy_price=data.get("buy_price"),
+        notes=data.get("notes"),
+        user_id=user_id
+    )
 
     db.session.add(position)
     db.session.commit()
@@ -52,12 +73,8 @@ def create_position():
 @positions_bp.get("/<int:position_id>")
 @jwt_required()
 def get_position(position_id):
-    user_id = int(get_jwt_identity())
-
-    position = Position.query.filter_by(
-        id=position_id,
-        user_id=user_id
-    ).first()
+    user_id = get_current_user_id()
+    position = find_user_position(position_id, user_id)
 
     if not position:
         return jsonify({"error": "Position not found."}), 404
@@ -68,31 +85,17 @@ def get_position(position_id):
 @positions_bp.patch("/<int:position_id>")
 @jwt_required()
 def update_position(position_id):
-    user_id = int(get_jwt_identity())
+    user_id = get_current_user_id()
     data = request.get_json() or {}
 
-    position = Position.query.filter_by(
-        id=position_id,
-        user_id=user_id
-    ).first()
+    position = find_user_position(position_id, user_id)
 
     if not position:
         return jsonify({"error": "Position not found."}), 404
 
-    if "item_id" in data:
-        position.item_id = data["item_id"]
-
-    if "item_name" in data:
-        position.item_name = data["item_name"]
-
-    if "quantity" in data:
-        position.quantity = data["quantity"]
-
-    if "buy_price" in data:
-        position.buy_price = data["buy_price"]
-
-    if "notes" in data:
-        position.notes = data["notes"]
+    for field in ["item_id", "item_name", "quantity", "buy_price", "notes"]:
+        if field in data:
+            setattr(position, field, data[field])
 
     db.session.commit()
 
@@ -102,12 +105,8 @@ def update_position(position_id):
 @positions_bp.delete("/<int:position_id>")
 @jwt_required()
 def delete_position(position_id):
-    user_id = int(get_jwt_identity())
-
-    position = Position.query.filter_by(
-        id=position_id,
-        user_id=user_id
-    ).first()
+    user_id = get_current_user_id()
+    position = find_user_position(position_id, user_id)
 
     if not position:
         return jsonify({"error": "Position not found."}), 404
