@@ -23,6 +23,8 @@ def index():
 
 from routes.auth_routes import auth_bp
 from routes.position_routes import positions_bp
+from routes.watchlist_routes import watchlist_bp
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(positions_bp)
+app.register_blueprint(watchlist_bp)
