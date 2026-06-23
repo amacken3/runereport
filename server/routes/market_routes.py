@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
 import requests
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
 
 market_bp = Blueprint("market_bp", __name__, url_prefix="/market")
@@ -132,3 +132,25 @@ def get_top_movers():
 
     except requests.RequestException:
         return jsonify({"error": "Unable to fetch top mover data."}), 502
+    
+@market_bp.get("/timeseries/<int:item_id>")
+def get_timeseries(item_id):
+    timestep = request.args.get("timestep", "24h")
+
+    allowed_timesteps = {"5m", "1h", "6h", "24h"}
+
+    if timestep not in allowed_timesteps:
+        return jsonify({
+            "error": "timestep must be one of: 5m, 1h, 6h, 24h."
+        }), 400
+
+    try:
+        cache_key = f"timeseries:{item_id}:{timestep}"
+        endpoint = f"/timeseries?id={item_id}&timestep={timestep}"
+
+        data = get_cached_data(cache_key, endpoint, ttl_seconds=300)
+
+        return jsonify(data), 200
+
+    except requests.RequestException:
+        return jsonify({"error": "Unable to fetch time-series data."}), 502
