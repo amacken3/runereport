@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from models import db, Position
+from schemas import position_schema, positions_schema
 from services.osrs_api import get_mapping_data, get_latest_data
 from services.position_analysis import build_position_analysis
 
@@ -44,7 +45,7 @@ def get_positions():
 
     positions = Position.query.filter_by(user_id=user_id).all()
 
-    return jsonify([position.to_dict() for position in positions]), 200
+    return jsonify(positions_schema.dump(positions)), 200
 
 
 @positions_bp.post("")
@@ -70,7 +71,7 @@ def create_position():
     db.session.add(position)
     db.session.commit()
 
-    return jsonify(position.to_dict()), 201
+    return jsonify(position_schema.dump(position)), 201
 
 
 @positions_bp.get("/<int:position_id>")
@@ -82,7 +83,7 @@ def get_position(position_id):
     if not position:
         return jsonify({"error": "Position not found."}), 404
 
-    return jsonify(position.to_dict()), 200
+    return jsonify(position_schema.dump(position)), 200
 
 
 @positions_bp.get("/<int:position_id>/analysis")
@@ -130,7 +131,7 @@ def update_position(position_id):
 
     db.session.commit()
 
-    return jsonify(position.to_dict()), 200
+    return jsonify(position_schema.dump(position)), 200
 
 
 @positions_bp.delete("/<int:position_id>")

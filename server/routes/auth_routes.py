@@ -1,7 +1,8 @@
-from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask import Blueprint, jsonify, request
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 
 from models import db, User
+from schemas import user_schema
 
 
 auth_bp = Blueprint("auth_bp", __name__, url_prefix="/auth")
@@ -37,7 +38,7 @@ def signup():
     access_token = create_access_token(identity=str(user.id))
 
     return jsonify({
-        "user": user.to_dict(),
+        "user": user_schema.dump(user),
         "access_token": access_token
     }), 201
 
@@ -60,7 +61,7 @@ def login():
     access_token = create_access_token(identity=str(user.id))
 
     return jsonify({
-        "user": user.to_dict(),
+        "user": user_schema.dump(user),
         "access_token": access_token
     }), 200
 
@@ -74,4 +75,4 @@ def current_user():
     if not user:
         return jsonify({"error": "User not found."}), 404
 
-    return jsonify(user.to_dict()), 200
+    return jsonify(user_schema.dump(user)), 200
