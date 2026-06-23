@@ -15,7 +15,6 @@ def get_positions():
 
     return jsonify([position.to_dict() for position in positions]), 200
 
-
 @positions_bp.post("")
 @jwt_required()
 def create_position():
@@ -47,7 +46,6 @@ def create_position():
 
     return jsonify(position.to_dict()), 201
 
-
 @positions_bp.get("/<int:position_id>")
 @jwt_required()
 def get_position(position_id):
@@ -62,7 +60,6 @@ def get_position(position_id):
         return jsonify({"error": "Position not found."}), 404
 
     return jsonify(position.to_dict()), 200
-
 
 @positions_bp.patch("/<int:position_id>")
 @jwt_required()
@@ -96,7 +93,6 @@ def update_position(position_id):
     db.session.commit()
 
     return jsonify(position.to_dict()), 200
-
 
 @positions_bp.delete("/<int:position_id>")
 @jwt_required()
