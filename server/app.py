@@ -20,3 +20,7 @@ jwt = JWTManager(app)
 @app.get("/")
 def index():
     return jsonify({"message": "RuneReport API is running"}), 200
+
+from routes.auth_routes import auth_bp
+
+app.register_blueprint(auth_bp)
