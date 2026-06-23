@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from models import db, WatchlistItem
+from schemas import watchlist_schema, watchlists_schema
 
 
 watchlist_bp = Blueprint("watchlist_bp", __name__, url_prefix="/watchlist")
@@ -14,7 +15,7 @@ def get_watchlist_items():
 
     watchlist_items = WatchlistItem.query.filter_by(user_id=user_id).all()
 
-    return jsonify([item.to_dict() for item in watchlist_items]), 200
+    return jsonify(watchlists_schema.dump(watchlist_items)), 200
 
 
 @watchlist_bp.post("")
@@ -42,7 +43,7 @@ def create_watchlist_item():
     db.session.add(watchlist_item)
     db.session.commit()
 
-    return jsonify(watchlist_item.to_dict()), 201
+    return jsonify(watchlist_schema.dump(watchlist_item)), 201
 
 
 @watchlist_bp.get("/<int:watchlist_item_id>")
@@ -58,7 +59,7 @@ def get_watchlist_item(watchlist_item_id):
     if not watchlist_item:
         return jsonify({"error": "Watchlist item not found."}), 404
 
-    return jsonify(watchlist_item.to_dict()), 200
+    return jsonify(watchlist_schema.dump(watchlist_item)), 200
 
 
 @watchlist_bp.patch("/<int:watchlist_item_id>")
@@ -86,7 +87,7 @@ def update_watchlist_item(watchlist_item_id):
 
     db.session.commit()
 
-    return jsonify(watchlist_item.to_dict()), 200
+    return jsonify(watchlist_schema.dump(watchlist_item)), 200
 
 
 @watchlist_bp.delete("/<int:watchlist_item_id>")

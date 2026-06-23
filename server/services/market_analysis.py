@@ -1,3 +1,5 @@
+from services.icon_utils import build_icon_url
+
 GE_TAX_RATE = 0.02
 GE_TAX_CAP = 5_000_000
 TAX_EXEMPT_ITEM_NAMES = {"old school bond"}
@@ -127,6 +129,7 @@ def build_top_movers(mapping_data, latest_data, hourly_data):
             "item_id": int(item_id),
             "item_name": item_name,
             "icon": item_info.get("icon"),
+            "icon_url": build_icon_url(item_info.get("icon")),
             "current_price": current_price,
             "average_price": average_price,
             "price_change": price_change,
@@ -193,6 +196,7 @@ def build_market_analysis(item_id, mapping_data, latest_data, hourly_data, daily
         "item_id": item_id,
         "item_name": item_name,
         "icon": item_info.get("icon"),
+        "icon_url": build_icon_url(item_info.get("icon")),
         "examine": item_info.get("examine"),
         "members": item_info.get("members"),
         "limit": item_info.get("limit"),
