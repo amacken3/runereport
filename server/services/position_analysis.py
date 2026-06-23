@@ -1,4 +1,5 @@
 from services.market_analysis import calculate_after_tax_value, find_item_info
+from services.icon_utils import build_icon_url
 
 
 def build_position_analysis(position, mapping_data, latest_data):
@@ -46,6 +47,7 @@ def build_position_analysis(position, mapping_data, latest_data):
         "item_id": position.item_id,
         "item_name": item_name,
         "icon": item_info.get("icon") if item_info else None,
+        "icon_url": build_icon_url(item_info.get("icon")) if item_info else None,
         "quantity": quantity,
         "buy_price": buy_price,
         "total_cost": total_cost,
