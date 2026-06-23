@@ -1,7 +1,10 @@
+import requests
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from models import db, Position
+from services.osrs_api import get_mapping_data, get_latest_data
+from services.position_analysis import build_position_analysis
 
 
 positions_bp = Blueprint("positions_bp", __name__, url_prefix="/positions")
@@ -80,6 +83,34 @@ def get_position(position_id):
         return jsonify({"error": "Position not found."}), 404
 
     return jsonify(position.to_dict()), 200
+
+
+@positions_bp.get("/<int:position_id>/analysis")
+@jwt_required()
+def get_position_analysis(position_id):
+    user_id = get_current_user_id()
+    position = find_user_position(position_id, user_id)
+
+    if not position:
+        return jsonify({"error": "Position not found."}), 404
+
+    try:
+        mapping_data = get_mapping_data()
+        latest_data = get_latest_data()
+
+        analysis = build_position_analysis(
+            position=position,
+            mapping_data=mapping_data,
+            latest_data=latest_data
+        )
+
+        if not analysis:
+            return jsonify({"error": "Position analysis data not found."}), 404
+
+        return jsonify(analysis), 200
+
+    except requests.RequestException:
+        return jsonify({"error": "Unable to fetch position analysis data."}), 502
 
 
 @positions_bp.patch("/<int:position_id>")
