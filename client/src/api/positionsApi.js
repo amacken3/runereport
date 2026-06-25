@@ -36,3 +36,10 @@ export function getPositionAnalysis(token, positionId) {
     headers: getAuthHeaders(token),
   });
 }
+
+export function generatePositionAiAnalysis(token, positionId) {
+  return apiRequest(`/positions/${positionId}/ai-analysis`, {
+    method: "POST",
+    headers: getAuthHeaders(token),
+  });
+}

@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { getMarketAnalysis, getMarketTimeseriesAnalysis } from "../api/marketApi";
-import { getPositionAnalysis } from "../api/positionsApi";
+import {
+  generatePositionAiAnalysis,
+  getPositionAnalysis,
+} from "../api/positionsApi";
 import useAuth from "../hooks/useAuth";
 
 function getProfitLabel(value) {
@@ -56,6 +59,10 @@ function PositionAnalysisPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [aiAnalysis, setAiAnalysis] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState("");
+
   useEffect(() => {
     async function loadAnalysis() {
       try {
@@ -79,6 +86,20 @@ function PositionAnalysisPage() {
 
     loadAnalysis();
   }, [id, token]);
+
+  async function handleGenerateAiAnalysis() {
+    setAiLoading(true);
+    setAiError("");
+
+    try {
+      const data = await generatePositionAiAnalysis(token, id);
+      setAiAnalysis(data.ai_analysis);
+    } catch (err) {
+      setAiError(err.message);
+    } finally {
+      setAiLoading(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -197,14 +218,25 @@ function PositionAnalysisPage() {
 
         <p>
           Generate a plain-English summary using this position, current market
-          prices, GE tax, and recent trend data.
+          prices, GE tax, short-term movement, and long-term trend data.
         </p>
 
-        <button type="button" disabled>
-          Generate AI Analysis
+        <button
+          type="button"
+          onClick={handleGenerateAiAnalysis}
+          disabled={aiLoading}
+        >
+          {aiLoading ? "Generating..." : "Generate AI Analysis"}
         </button>
 
-        <p>AI analysis will be connected after the backend route is added.</p>
+        {aiError && <p>{aiError}</p>}
+
+        {aiAnalysis && (
+          <section>
+            <h3>Generated Summary</h3>
+            <pre>{String(aiAnalysis)}</pre>
+          </section>
+        )}
       </section>
     </main>
   );

@@ -4,7 +4,16 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from models import db, Position
 from schemas import position_schema, positions_schema
-from services.osrs_api import get_mapping_data, get_latest_data
+from services.ai_analysis import generate_ai_position_analysis
+from services.market_analysis import build_market_analysis
+from services.market_timeseries import build_timeseries_analysis
+from services.osrs_api import (
+    get_daily_data,
+    get_hourly_data,
+    get_latest_data,
+    get_mapping_data,
+    get_timeseries_data
+)
 from services.position_analysis import build_position_analysis
 
 
@@ -112,6 +121,78 @@ def get_position_analysis(position_id):
 
     except requests.RequestException:
         return jsonify({"error": "Unable to fetch position analysis data."}), 502
+
+
+@positions_bp.post("/<int:position_id>/ai-analysis")
+@jwt_required()
+def create_position_ai_analysis(position_id):
+    user_id = get_current_user_id()
+    position = find_user_position(position_id, user_id)
+
+    if not position:
+        return jsonify({"error": "Position not found."}), 404
+
+    try:
+        mapping_data = get_mapping_data()
+        latest_data = get_latest_data()
+        hourly_data = get_hourly_data()
+        daily_data = get_daily_data()
+
+        position_analysis = build_position_analysis(
+            position=position,
+            mapping_data=mapping_data,
+            latest_data=latest_data
+        )
+
+        if not position_analysis:
+            return jsonify({"error": "Position analysis data not found."}), 404
+
+        market_analysis = build_market_analysis(
+            item_id=position.item_id,
+            mapping_data=mapping_data,
+            latest_data=latest_data,
+            hourly_data=hourly_data,
+            daily_data=daily_data
+        )
+
+        if not market_analysis:
+            return jsonify({"error": "Market analysis data not found."}), 404
+
+        timeseries_data = get_timeseries_data(position.item_id, "24h")
+
+        timeseries_analysis = build_timeseries_analysis(
+            item_id=position.item_id,
+            timestep="24h",
+            timeseries_data=timeseries_data
+        )
+
+        if not timeseries_analysis:
+            return jsonify({"error": "Long-term trend data not found."}), 404
+
+        ai_analysis = generate_ai_position_analysis(
+            position_analysis=position_analysis,
+            market_analysis=market_analysis,
+            timeseries_analysis=timeseries_analysis
+        )
+
+        return jsonify({
+            "position_id": position.id,
+            "item_id": position.item_id,
+            "item_name": position_analysis["item_name"],
+            "ai_analysis": ai_analysis
+        }), 200
+
+    except requests.RequestException:
+        return jsonify({"error": "Unable to fetch market data for AI analysis."}), 502
+
+    except ValueError as error:
+        return jsonify({"error": str(error)}), 500
+
+    except Exception as error:
+        return jsonify({
+            "error": "Unable to generate AI analysis.",
+            "details": str(error)
+        }), 502
 
 
 @positions_bp.patch("/<int:position_id>")
