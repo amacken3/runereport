@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { getPositionAnalysis } from "../api/positionsApi";
 import useAuth from "../hooks/useAuth";
@@ -129,6 +130,10 @@ function PositionCard({ position, onUpdate, onDelete }) {
       <button type="button" onClick={handleDelete}>
         Delete
       </button>
+
+      <Link to={`/positions/${position.id}/analysis`}>
+        View Analysis
+      </Link>
     </article>
   );
 }

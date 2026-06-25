@@ -9,6 +9,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import PositionsPage from "./pages/PositionsPage";
 import SignupPage from "./pages/SignupPage";
 import WatchlistPage from "./pages/WatchlistPage";
+import PositionAnalysisPage from "./pages/PositionAnalysisPage";
 
 function App() {
   return (
@@ -43,6 +44,15 @@ function App() {
           element={
             <ProtectedRoute>
               <WatchlistPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/positions/:id/analysis"
+          element={
+            <ProtectedRoute>
+              <PositionAnalysisPage />
             </ProtectedRoute>
           }
         />
