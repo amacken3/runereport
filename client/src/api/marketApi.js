@@ -11,3 +11,7 @@ export function getMarketAnalysis(itemId) {
 export function getMarketTimeseriesAnalysis(itemId, timestep = "24h") {
   return apiRequest(`/market/analysis/${itemId}/timeseries?timestep=${timestep}`);
 }
+
+export function getItemMapping() {
+  return apiRequest("/market/mapping");
+}
