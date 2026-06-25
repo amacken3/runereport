@@ -1,0 +1,220 @@
+import { useEffect, useState } from "react";
+
+import { getMarketAnalysis } from "../api/marketApi";
+import WatchlistForm from "./WatchlistForm";
+
+function WatchlistCard({
+  watchlistItem,
+  onUpdate,
+  onDelete,
+  onAddToPositions,
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [isAddingToPositions, setIsAddingToPositions] = useState(false);
+  const [positionFormData, setPositionFormData] = useState({
+    quantity: "",
+    buy_price: "",
+    notes: "",
+  });
+  const [marketAnalysis, setMarketAnalysis] = useState(null);
+  const [marketLoading, setMarketLoading] = useState(true);
+  const [marketError, setMarketError] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function loadMarketAnalysis() {
+      setMarketLoading(true);
+      setMarketError("");
+
+      try {
+        const data = await getMarketAnalysis(watchlistItem.item_id);
+        setMarketAnalysis(data);
+      } catch (err) {
+        setMarketError(err.message);
+      } finally {
+        setMarketLoading(false);
+      }
+    }
+
+    loadMarketAnalysis();
+  }, [watchlistItem.item_id]);
+
+  async function handleUpdate(watchlistData) {
+    await onUpdate(watchlistItem.id, watchlistData);
+    setIsEditing(false);
+  }
+
+  function handleDelete() {
+    const confirmed = window.confirm(
+      `Delete ${watchlistItem.item_name} from your watchlist?`
+    );
+
+    if (confirmed) {
+      onDelete(watchlistItem.id);
+    }
+  }
+
+  function handlePositionChange(event) {
+    setPositionFormData({
+      ...positionFormData,
+      [event.target.name]: event.target.value,
+    });
+  }
+
+  async function handleAddToPositions(event) {
+    event.preventDefault();
+    setMessage("");
+    setError("");
+
+    try {
+      await onAddToPositions(watchlistItem, positionFormData);
+
+      setMessage("Added to positions.");
+      setIsAddingToPositions(false);
+      setPositionFormData({
+        quantity: "",
+        buy_price: "",
+        notes: "",
+      });
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+    function getMovementText() {
+        if (!marketAnalysis) {
+            return null;
+        }
+
+        const percentChange = marketAnalysis.one_hour_percent_change;
+
+        if (percentChange === undefined || percentChange === null) {
+            return null;
+        }
+
+        if (percentChange > 0) {
+            return `Up ${Math.abs(percentChange)}% over the last hour`;
+        }
+
+        if (percentChange < 0) {
+            return `Down ${Math.abs(percentChange)}% over the last hour`;
+        }
+
+        return "No movement over the last hour";
+    }
+
+  if (isEditing) {
+    return (
+      <article>
+        <h3>Edit {watchlistItem.item_name}</h3>
+
+        <WatchlistForm
+          initialValues={watchlistItem}
+          onSubmit={handleUpdate}
+          submitLabel="Save Changes"
+        />
+
+        <button type="button" onClick={() => setIsEditing(false)}>
+          Cancel
+        </button>
+      </article>
+    );
+  }
+
+  return (
+    <article>
+      {watchlistItem.icon_url && (
+        <img
+          src={watchlistItem.icon_url}
+          alt={watchlistItem.item_name}
+          width="42"
+          height="42"
+        />
+      )}
+
+      <h3>{watchlistItem.item_name}</h3>
+
+      {marketLoading && <p>Loading market data...</p>}
+
+      {marketError && <p>{marketError}</p>}
+
+      {marketAnalysis && (
+        <>
+          <p>
+            Current price: {marketAnalysis.current_price?.toLocaleString()} gp
+          </p>
+
+          {getMovementText() && <p>{getMovementText()}</p>}
+        </>
+      )}
+
+      {watchlistItem.notes && <p>Notes: {watchlistItem.notes}</p>}
+
+      {message && <p>{message}</p>}
+      {error && <p>{error}</p>}
+
+      {!isAddingToPositions && (
+        <button type="button" onClick={() => setIsAddingToPositions(true)}>
+          Add to Positions
+        </button>
+      )}
+
+      {isAddingToPositions && (
+        <form onSubmit={handleAddToPositions}>
+          <h4>Add {watchlistItem.item_name} to Positions</h4>
+
+          <label>
+            Quantity
+            <input
+              name="quantity"
+              type="number"
+              value={positionFormData.quantity}
+              onChange={handlePositionChange}
+              required
+            />
+          </label>
+
+          <label>
+            Buy Price
+            <input
+              name="buy_price"
+              type="number"
+              value={positionFormData.buy_price}
+              onChange={handlePositionChange}
+              required
+            />
+          </label>
+
+          <label>
+            Notes
+            <textarea
+              name="notes"
+              value={positionFormData.notes}
+              onChange={handlePositionChange}
+            />
+          </label>
+
+          <button type="submit">Save Position</button>
+
+          <button
+            type="button"
+            onClick={() => setIsAddingToPositions(false)}
+          >
+            Cancel
+          </button>
+        </form>
+      )}
+
+      <button type="button" onClick={() => setIsEditing(true)}>
+        Edit
+      </button>
+
+      <button type="button" onClick={handleDelete}>
+        Delete
+      </button>
+    </article>
+  );
+}
+
+export default WatchlistCard;
