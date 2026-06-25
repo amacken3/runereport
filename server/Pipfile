@@ -15,6 +15,7 @@ psycopg2-binary = "*"
 requests = "*"
 pandas = "*"
 marshmallow = "*"
+openai = "*"
 
 [dev-packages]
 pytest = "*"
