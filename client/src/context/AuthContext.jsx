@@ -4,10 +4,13 @@ import { getCurrentUser, loginUser, signupUser } from "../api/authApi";
 
 export const AuthContext = createContext(null);
 
+const ACCESS_TOKEN_KEY = "runereport_token";
+const REFRESH_TOKEN_KEY = "runereport_refresh_token";
+
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(() =>
-    localStorage.getItem("runereport_token")
+    localStorage.getItem(ACCESS_TOKEN_KEY)
   );
   const [loading, setLoading] = useState(true);
 
@@ -21,8 +24,10 @@ function AuthProvider({ children }) {
       try {
         const currentUser = await getCurrentUser(token);
         setUser(currentUser);
+        setToken(localStorage.getItem(ACCESS_TOKEN_KEY));
       } catch {
-        localStorage.removeItem("runereport_token");
+        localStorage.removeItem(ACCESS_TOKEN_KEY);
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
         setToken(null);
         setUser(null);
       } finally {
@@ -36,7 +41,9 @@ function AuthProvider({ children }) {
   async function login(credentials) {
     const data = await loginUser(credentials);
 
-    localStorage.setItem("runereport_token", data.access_token);
+    localStorage.setItem(ACCESS_TOKEN_KEY, data.access_token);
+    localStorage.setItem(REFRESH_TOKEN_KEY, data.refresh_token);
+
     setToken(data.access_token);
     setUser(data.user);
 
@@ -46,7 +53,9 @@ function AuthProvider({ children }) {
   async function signup(userData) {
     const data = await signupUser(userData);
 
-    localStorage.setItem("runereport_token", data.access_token);
+    localStorage.setItem(ACCESS_TOKEN_KEY, data.access_token);
+    localStorage.setItem(REFRESH_TOKEN_KEY, data.refresh_token);
+
     setToken(data.access_token);
     setUser(data.user);
 
@@ -54,7 +63,9 @@ function AuthProvider({ children }) {
   }
 
   function logout() {
-    localStorage.removeItem("runereport_token");
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+
     setToken(null);
     setUser(null);
   }
