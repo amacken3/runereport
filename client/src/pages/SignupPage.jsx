@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
+import styles from "./SignupPage.module.css";
 
 function SignupPage() {
   const { signup } = useAuth();
@@ -34,51 +35,57 @@ function SignupPage() {
   }
 
   return (
-    <main className="page auth-page">
-      <h1>Sign Up</h1>
-      <p>Create an account to track your OSRS market positions.</p>
+    <main className={styles.page}>
+      <section className={styles.authCard}>
+        <p className={styles.eyebrow}>Start tracking</p>
+        <p className={styles.subtitle}>
+          Create an account to track your OSRS market positions.
+        </p>
 
-      {error && <p className="error-message">{error}</p>}
+        {error && <p className={styles.errorMessage}>{error}</p>}
 
-      <form className="form" onSubmit={handleSubmit}>
-        <label>
-          Username
-          <input
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-        </label>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <label className={styles.field}>
+            Username
+            <input
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <label>
-          Email
-          <input
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </label>
+          <label className={styles.field}>
+            Email
+            <input
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <label>
-          Password
-          <input
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </label>
+          <label className={styles.field}>
+            Password
+            <input
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <button type="submit">Create Account</button>
-      </form>
+          <button type="submit" className={styles.submitButton}>
+            Create Account
+          </button>
+        </form>
 
-      <p>
-        Already have an account? <Link to="/login">Log in</Link>
-      </p>
+        <p className={styles.switchText}>
+          Already have an account? <Link to="/login">Log in</Link>
+        </p>
+      </section>
     </main>
   );
 }

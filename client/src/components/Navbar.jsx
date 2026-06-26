@@ -29,7 +29,7 @@ function Navbar() {
 
         {!isAuthenticated && (
           <>
-            <NavLink to="/login">Login</NavLink>
+            <NavLink to="/login">Log In</NavLink>
             <NavLink to="/signup">Sign Up</NavLink>
           </>
         )}
