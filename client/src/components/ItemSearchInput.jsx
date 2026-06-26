@@ -1,6 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { getItemMapping } from "../api/marketApi";
+import styles from "./ItemSearchInput.module.css";
+
+function buildIconUrl(item) {
+  const icon = item?.icon;
+
+  if (!icon) {
+    return null;
+  }
+
+  const formattedIcon = encodeURIComponent(icon.replaceAll(" ", "_"));
+  return `https://oldschool.runescape.wiki/images/${formattedIcon}`;
+}
 
 function ItemSearchInput({ selectedItem, onSelect }) {
   const [items, setItems] = useState([]);
@@ -44,8 +56,8 @@ function ItemSearchInput({ selectedItem, onSelect }) {
   }
 
   return (
-    <div>
-      <label>
+    <div className={styles.searchWrap}>
+      <label className={styles.field}>
         Item Name
         <input
           value={searchTerm}
@@ -55,21 +67,60 @@ function ItemSearchInput({ selectedItem, onSelect }) {
         />
       </label>
 
-      {error && <p>{error}</p>}
+      {error && <p className={styles.errorMessage}>{error}</p>}
 
       {matchingItems.length > 0 && !selectedItem && (
-        <ul>
-          {matchingItems.map((item) => (
-            <li key={item.id}>
-              <button type="button" onClick={() => handleSelect(item)}>
-                {item.name}
-              </button>
-            </li>
-          ))}
+        <ul className={styles.resultsList}>
+          {matchingItems.map((item) => {
+            const iconUrl = buildIconUrl(item);
+
+            return (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  className={styles.resultButton}
+                  onClick={() => handleSelect(item)}
+                >
+                  {iconUrl ? (
+                    <img
+                      src={iconUrl}
+                      alt=""
+                      width="32"
+                      height="32"
+                      className={styles.itemIcon}
+                    />
+                  ) : (
+                    <span className={styles.iconFallback}>◆</span>
+                  )}
+
+                  <span>{item.name}</span>
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
 
-      {selectedItem && <p>Selected item: {selectedItem.name}</p>}
+      {selectedItem && (
+        <div className={styles.selectedItem}>
+          {buildIconUrl(selectedItem) ? (
+            <img
+              src={buildIconUrl(selectedItem)}
+              alt=""
+              width="32"
+              height="32"
+              className={styles.itemIcon}
+            />
+          ) : (
+            <span className={styles.iconFallback}>◆</span>
+          )}
+
+          <p>
+            <span>Selected item</span>
+            {selectedItem.name}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

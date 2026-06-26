@@ -7,6 +7,7 @@ import {
   getPositionAnalysis,
 } from "../api/positionsApi";
 import useAuth from "../hooks/useAuth";
+import styles from "./PositionAnalysisPage.module.css";
 
 function getProfitLabel(value) {
   if (value > 0) {
@@ -103,123 +104,190 @@ function PositionAnalysisPage() {
 
   if (loading) {
     return (
-      <main className="page">
-        <h1>Position Analysis</h1>
-        <p>Loading analysis...</p>
+      <main className={styles.page}>
+        <section className={styles.statusCard}>
+          <h1>Position Analysis</h1>
+          <p>Loading analysis...</p>
+        </section>
       </main>
     );
   }
 
   if (error) {
     return (
-      <main className="page">
-        <h1>Position Analysis</h1>
-        <p>{error}</p>
-        <Link to="/positions">Back to Positions</Link>
+      <main className={styles.page}>
+        <section className={styles.statusCard}>
+          <h1>Position Analysis</h1>
+          <p className={styles.errorMessage}>{error}</p>
+          <Link className={styles.backLink} to="/positions">
+            Back to Positions
+          </Link>
+        </section>
       </main>
     );
   }
 
   return (
-    <main className="page">
-      <Link to="/positions">Back to Positions</Link>
+    <main className={styles.page}>
+      <Link className={styles.backLink} to="/positions">
+        ← Back to Positions
+      </Link>
 
-      <section>
-        {positionAnalysis.icon_url && (
-          <img
-            src={positionAnalysis.icon_url}
-            alt={positionAnalysis.item_name}
-            width="54"
-            height="54"
-          />
-        )}
+      <section className={styles.hero}>
+        <div className={styles.itemIntro}>
+          {positionAnalysis.icon_url && (
+            <div className={styles.iconWrap}>
+              <img
+                src={positionAnalysis.icon_url}
+                alt={positionAnalysis.item_name}
+                width="54"
+                height="54"
+              />
+            </div>
+          )}
 
-        <h1>{positionAnalysis.item_name} Analysis</h1>
+          <div>
+            <p className={styles.eyebrow}>Position report</p>
+            <h1>{positionAnalysis.item_name} Analysis</h1>
 
-        <p>
-          Quantity: {positionAnalysis.quantity?.toLocaleString()} | Buy price:{" "}
-          {positionAnalysis.buy_price?.toLocaleString()} gp
-        </p>
+            <p>
+              Quantity: {positionAnalysis.quantity?.toLocaleString()} | Buy price:{" "}
+              {positionAnalysis.buy_price?.toLocaleString()} gp
+            </p>
+          </div>
+        </div>
       </section>
 
-      <section>
-        <h2>Current Position Value</h2>
+      <section className={styles.panel}>
+        <div className={styles.sectionHeader}>
+          <h2>Current Position Value</h2>
+          <p>Estimated value if you sold this position now.</p>
+        </div>
 
-        <p>
-          Current sell price: {positionAnalysis.raw_sell_price?.toLocaleString()} gp
-        </p>
+        <div className={styles.statGrid}>
+          <article className={styles.statCard}>
+            <span>Current sell price</span>
+            <strong>{positionAnalysis.raw_sell_price?.toLocaleString()} gp</strong>
+          </article>
 
-        <p>
-          Estimated GE tax:{" "}
-          {positionAnalysis.estimated_ge_tax_per_item?.toLocaleString()} gp per
-          item
-        </p>
+          <article className={styles.statCard}>
+            <span>Estimated GE tax</span>
+            <strong>
+              {positionAnalysis.estimated_ge_tax_per_item?.toLocaleString()} gp
+            </strong>
+            <small>per item</small>
+          </article>
 
-        <p>
-          {getProfitLabel(positionAnalysis.estimated_profit_after_tax)}:{" "}
-          {positionAnalysis.estimated_profit_after_tax?.toLocaleString()} gp
-        </p>
+          <article
+            className={
+              positionAnalysis.estimated_profit_after_tax >= 0
+                ? styles.positiveCard
+                : styles.negativeCard
+            }
+          >
+            <span>{getProfitLabel(positionAnalysis.estimated_profit_after_tax)}</span>
+            <strong>
+              {positionAnalysis.estimated_profit_after_tax?.toLocaleString()} gp
+            </strong>
+          </article>
+        </div>
       </section>
 
-      <section>
-        <h2>Market Movement</h2>
-
-        <p>{getMarketSummary(marketAnalysis)}</p>
+      <section className={styles.panel}>
+        <div className={styles.sectionHeader}>
+          <h2>Market Movement</h2>
+          <p>{getMarketSummary(marketAnalysis)}</p>
+        </div>
 
         {marketAnalysis && (
-          <>
-            <p>
-              Current price: {marketAnalysis.current_price?.toLocaleString()} gp
-            </p>
+          <div className={styles.statGrid}>
+            <article className={styles.statCard}>
+              <span>Current price</span>
+              <strong>{marketAnalysis.current_price?.toLocaleString()} gp</strong>
+            </article>
 
-            <p>
-              One-hour change:{" "}
-              {marketAnalysis.one_hour_price_change?.toLocaleString()} gp (
-              {marketAnalysis.one_hour_percent_change}%)
-            </p>
+            <article
+              className={
+                marketAnalysis.one_hour_price_change >= 0
+                  ? styles.positiveCard
+                  : styles.negativeCard
+              }
+            >
+              <span>One-hour change</span>
+              <strong>
+                {marketAnalysis.one_hour_price_change?.toLocaleString()} gp
+              </strong>
+              <small>{marketAnalysis.one_hour_percent_change}%</small>
+            </article>
 
-            <p>
-              Daily change: {marketAnalysis.daily_price_change?.toLocaleString()}{" "}
-              gp ({marketAnalysis.daily_percent_change}%)
-            </p>
-          </>
+            <article
+              className={
+                marketAnalysis.daily_price_change >= 0
+                  ? styles.positiveCard
+                  : styles.negativeCard
+              }
+            >
+              <span>Daily change</span>
+              <strong>{marketAnalysis.daily_price_change?.toLocaleString()} gp</strong>
+              <small>{marketAnalysis.daily_percent_change}%</small>
+            </article>
+          </div>
         )}
       </section>
 
       {timeseriesAnalysis && (
-        <section>
-          <h2>Long-Term Trend</h2>
+        <section className={styles.panel}>
+          <div className={styles.sectionHeader}>
+            <h2>Long-Term Trend</h2>
+            <p>Historical movement based on the 24-hour time series endpoint.</p>
+          </div>
 
-          <p>
-            Trend direction:{" "}
-            {capitalizeText(timeseriesAnalysis.trend_direction)}
-          </p>
+          <div className={styles.statGrid}>
+            <article className={styles.statCard}>
+              <span>Trend direction</span>
+              <strong>{capitalizeText(timeseriesAnalysis.trend_direction)}</strong>
+            </article>
 
-          <p>
-            Price change: {timeseriesAnalysis.price_change?.toLocaleString()} gp (
-            {timeseriesAnalysis.percent_change}%)
-          </p>
+            <article
+              className={
+                timeseriesAnalysis.price_change >= 0
+                  ? styles.positiveCard
+                  : styles.negativeCard
+              }
+            >
+              <span>Price change</span>
+              <strong>{timeseriesAnalysis.price_change?.toLocaleString()} gp</strong>
+              <small>{timeseriesAnalysis.percent_change}%</small>
+            </article>
 
-          <p>
-            Support price: {timeseriesAnalysis.support_price?.toLocaleString()} gp
-          </p>
+            <article className={styles.statCard}>
+              <span>Support price</span>
+              <strong>{timeseriesAnalysis.support_price?.toLocaleString()} gp</strong>
+            </article>
 
-          <p>
-            Resistance price:{" "}
-            {timeseriesAnalysis.resistance_price?.toLocaleString()} gp
-          </p>
+            <article className={styles.statCard}>
+              <span>Resistance price</span>
+              <strong>
+                {timeseriesAnalysis.resistance_price?.toLocaleString()} gp
+              </strong>
+            </article>
 
-          <p>Volatility: {timeseriesAnalysis.volatility_percent}%</p>
+            <article className={styles.statCard}>
+              <span>Volatility</span>
+              <strong>{timeseriesAnalysis.volatility_percent}%</strong>
+            </article>
+          </div>
         </section>
       )}
 
-      <section>
-        <h2>AI Analysis</h2>
-
-        <p>
-          Generate a plain-English summary using this position, current market
-          prices, GE tax, short-term movement, and long-term trend data.
-        </p>
+      <section className={styles.panel}>
+        <div className={styles.sectionHeader}>
+          <h2>AI Analysis</h2>
+          <p>
+            Generate a plain-English summary using this position, current market
+            prices, GE tax, short-term movement, and long-term trend data.
+          </p>
+        </div>
 
         <button
           type="button"
@@ -229,10 +297,10 @@ function PositionAnalysisPage() {
           {aiLoading ? "Generating..." : "Generate AI Analysis"}
         </button>
 
-        {aiError && <p>{aiError}</p>}
+        {aiError && <p className={styles.errorMessage}>{aiError}</p>}
 
         {aiAnalysis && (
-          <section>
+          <section className={styles.aiSummary}>
             <h3>Generated Summary</h3>
             <pre>{String(aiAnalysis)}</pre>
           </section>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { getMarketAnalysis } from "../api/marketApi";
 import WatchlistForm from "./WatchlistForm";
+import styles from "./WatchlistCard.module.css";
 
 function WatchlistCard({
   watchlistItem,
@@ -82,86 +83,144 @@ function WatchlistCard({
     }
   }
 
-    function getMovementText() {
-        if (!marketAnalysis) {
-            return null;
-        }
-
-        const percentChange = marketAnalysis.one_hour_percent_change;
-
-        if (percentChange === undefined || percentChange === null) {
-            return null;
-        }
-
-        if (percentChange > 0) {
-            return `Up ${Math.abs(percentChange)}% over the last hour`;
-        }
-
-        if (percentChange < 0) {
-            return `Down ${Math.abs(percentChange)}% over the last hour`;
-        }
-
-        return "No movement over the last hour";
+  function getMovementText() {
+    if (!marketAnalysis) {
+      return null;
     }
+
+    const percentChange = marketAnalysis.one_hour_percent_change;
+
+    if (percentChange === undefined || percentChange === null) {
+      return null;
+    }
+
+    if (percentChange > 0) {
+      return `Up ${Math.abs(percentChange)}% over the last hour`;
+    }
+
+    if (percentChange < 0) {
+      return `Down ${Math.abs(percentChange)}% over the last hour`;
+    }
+
+    return "No movement over the last hour";
+  }
+
+  function getMovementClass() {
+    if (!marketAnalysis) {
+      return styles.movementText;
+    }
+
+    const percentChange = marketAnalysis.one_hour_percent_change;
+
+    if (percentChange > 0) {
+      return styles.positive;
+    }
+
+    if (percentChange < 0) {
+      return styles.negative;
+    }
+
+    return styles.movementText;
+  }
 
   if (isEditing) {
     return (
-      <article>
-        <h3>Edit {watchlistItem.item_name}</h3>
+      <article className={styles.card}>
+        <div className={styles.cardHeader}>
+          <h3>Edit {watchlistItem.item_name}</h3>
+
+          <button
+            type="button"
+            className={styles.iconButton}
+            onClick={() => setIsEditing(false)}
+            aria-label="Cancel editing"
+            title="Cancel editing"
+          >
+            ✕
+          </button>
+        </div>
 
         <WatchlistForm
           initialValues={watchlistItem}
           onSubmit={handleUpdate}
           submitLabel="Save Changes"
         />
-
-        <button type="button" onClick={() => setIsEditing(false)}>
-          Cancel
-        </button>
       </article>
     );
   }
 
   return (
-    <article>
-      {watchlistItem.icon_url && (
-        <img
-          src={watchlistItem.icon_url}
-          alt={watchlistItem.item_name}
-          width="42"
-          height="42"
-        />
-      )}
-
-      <h3>{watchlistItem.item_name}</h3>
-
-      {marketLoading && <p>Loading market data...</p>}
-
-      {marketError && <p>{marketError}</p>}
-
-      {marketAnalysis && (
-        <>
-          <p>
-            Current price: {marketAnalysis.current_price?.toLocaleString()} gp
-          </p>
-
-          {getMovementText() && <p>{getMovementText()}</p>}
-        </>
-      )}
-
-      {watchlistItem.notes && <p>Notes: {watchlistItem.notes}</p>}
-
-      {message && <p>{message}</p>}
-      {error && <p>{error}</p>}
-
-      {!isAddingToPositions && (
-        <button type="button" onClick={() => setIsAddingToPositions(true)}>
-          Add to Positions
+    <article className={styles.card}>
+      <div className={styles.topActions}>
+        <button
+          type="button"
+          className={styles.iconButton}
+          onClick={() => setIsAddingToPositions(true)}
+          aria-label={`Add ${watchlistItem.item_name} to positions`}
+          title="Add to positions"
+        >
+          +
         </button>
-      )}
+
+        <button
+          type="button"
+          className={styles.iconButton}
+          onClick={() => setIsEditing(true)}
+          aria-label={`Edit ${watchlistItem.item_name}`}
+          title="Edit watchlist item"
+        >
+          🛠️
+        </button>
+      </div>
+
+      <div className={styles.mainRow}>
+        {watchlistItem.icon_url && (
+          <div className={styles.iconWrap}>
+            <img
+              src={watchlistItem.icon_url}
+              alt={watchlistItem.item_name}
+              width="42"
+              height="42"
+            />
+          </div>
+        )}
+
+        <div className={styles.content}>
+          <h3>{watchlistItem.item_name}</h3>
+
+          {marketLoading && (
+            <p className={styles.loadingText}>Loading market data...</p>
+          )}
+
+          {marketError && <p className={styles.errorMessage}>{marketError}</p>}
+
+          {marketAnalysis && (
+            <div className={styles.marketGrid}>
+              <p>
+                <span>Current price</span>
+                {marketAnalysis.current_price?.toLocaleString()} gp
+              </p>
+
+              {getMovementText() && (
+                <p className={getMovementClass()}>
+                  <span>Movement</span>
+                  {getMovementText()}
+                </p>
+              )}
+            </div>
+          )}
+
+          {watchlistItem.notes && (
+            <p className={styles.notes}>Notes: {watchlistItem.notes}</p>
+          )}
+
+          {message && <p className={styles.successMessage}>{message}</p>}
+          {error && <p className={styles.errorMessage}>{error}</p>}
+        </div>
+      </div>
 
       {isAddingToPositions && (
-        <form onSubmit={handleAddToPositions}>
+        <form className={styles.positionForm} onSubmit={handleAddToPositions}>
           <h4>Add {watchlistItem.item_name} to Positions</h4>
 
           <label>
@@ -195,24 +254,25 @@ function WatchlistCard({
             />
           </label>
 
-          <button type="submit">Save Position</button>
+          <div className={styles.formActions}>
+            <button type="submit">Save Position</button>
 
-          <button
-            type="button"
-            onClick={() => setIsAddingToPositions(false)}
-          >
-            Cancel
-          </button>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => setIsAddingToPositions(false)}
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       )}
 
-      <button type="button" onClick={() => setIsEditing(true)}>
-        Edit
-      </button>
-
-      <button type="button" onClick={handleDelete}>
-        Delete
-      </button>
+      <div className={styles.bottomActions}>
+        <button type="button" className={styles.deleteButton} onClick={handleDelete}>
+          Delete
+        </button>
+      </div>
     </article>
   );
 }

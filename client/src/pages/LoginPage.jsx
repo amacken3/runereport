@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
+import styles from "./LoginPage.module.css";
 
 function LoginPage() {
   const { login } = useAuth();
@@ -33,40 +34,47 @@ function LoginPage() {
   }
 
   return (
-    <main className="page auth-page">
-      <h1>Login</h1>
-      <p>Log in to view your saved RuneReport positions.</p>
+    <main className={styles.page}>
+      <section className={styles.authCard}>
+        <p className={styles.eyebrow}>Welcome back</p>
+        
+        <p className={styles.subtitle}>
+          Log in to view your saved RuneReport positions.
+        </p>
 
-      {error && <p className="error-message">{error}</p>}
+        {error && <p className={styles.errorMessage}>{error}</p>}
 
-      <form className="form" onSubmit={handleSubmit}>
-        <label>
-          Username
-          <input
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-        </label>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <label className={styles.field}>
+            Username
+            <input
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <label>
-          Password
-          <input
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </label>
+          <label className={styles.field}>
+            Password
+            <input
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <button type="submit">Login</button>
-      </form>
+          <button type="submit" className={styles.submitButton}>
+            Login
+          </button>
+        </form>
 
-      <p>
-        Need an account? <Link to="/signup">Sign up</Link>
-      </p>
+        <p className={styles.switchText}>
+          Need an account? <Link to="/signup">Sign up</Link>
+        </p>
+      </section>
     </main>
   );
 }

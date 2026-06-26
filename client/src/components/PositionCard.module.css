@@ -1,0 +1,187 @@
+.card {
+  position: relative;
+  padding: 1.15rem;
+  background:
+    linear-gradient(180deg, rgba(27, 38, 25, 0.96), rgba(13, 18, 14, 0.96));
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-small);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cardHeader h3 {
+  margin: 0;
+  color: var(--gold-light);
+}
+
+.editButton,
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 999px;
+}
+
+.editButton {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 2;
+}
+
+.mainRow {
+  display: flex;
+  gap: 1rem;
+  padding-right: 2.5rem;
+}
+
+.iconWrap {
+  display: grid;
+  place-items: center;
+  flex: 0 0 58px;
+  width: 58px;
+  height: 58px;
+  background: rgba(200, 155, 60, 0.08);
+  border: 1px solid var(--border-gold-soft);
+  border-radius: var(--radius-md);
+}
+
+.iconWrap img {
+  object-fit: contain;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.content h3 {
+  margin: 0 0 0.75rem;
+  color: var(--gold-light);
+  font-size: 1.25rem;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.metaGrid p,
+.analysisBox p {
+  margin: 0;
+  padding: 0.75rem;
+  background: rgba(8, 11, 8, 0.42);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.metaGrid span,
+.analysisBox span {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.notes {
+  margin: 0.8rem 0 0;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+
+.loadingText {
+  margin: 1rem 0 0;
+  color: var(--text-muted);
+}
+
+.errorMessage {
+  margin: 1rem 0 0;
+  padding: 0.85rem 1rem;
+  color: #ffd6d1;
+  background: rgba(184, 87, 77, 0.16);
+  border: 1px solid var(--red);
+  border-radius: var(--radius-sm);
+}
+
+.analysisBox {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-dark);
+}
+
+.analysisBox h4 {
+  margin: 0;
+  color: var(--gold-light);
+}
+
+.positive {
+  color: #d9ffd4 !important;
+}
+
+.negative {
+  color: #ffd6d1 !important;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.analysisLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-gold-soft);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.9rem;
+  color: var(--gold-light);
+  background: rgba(200, 155, 60, 0.08);
+  font-weight: 800;
+}
+
+.analysisLink:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.deleteButton {
+  color: #ffd6d1;
+  background: rgba(184, 87, 77, 0.16);
+  border-color: var(--red);
+}
+
+@media (max-width: 650px) {
+  .mainRow {
+    align-items: flex-start;
+  }
+
+  .metaGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button,
+  .analysisLink {
+    width: 100%;
+  }
+}

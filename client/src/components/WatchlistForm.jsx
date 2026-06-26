@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import ItemSearchInput from "./ItemSearchInput";
+import styles from "./WatchlistForm.module.css";
 
 function WatchlistForm({ initialValues = {}, onSubmit, submitLabel }) {
   const initialSelectedItem = initialValues.item_id
@@ -40,17 +41,24 @@ function WatchlistForm({ initialValues = {}, onSubmit, submitLabel }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      {error && <p>{error}</p>}
+    <form className={styles.form} onSubmit={handleSubmit}>
+      {error && <p className={styles.errorMessage}>{error}</p>}
 
-      <ItemSearchInput selectedItem={selectedItem} onSelect={setSelectedItem} />
+      <div className={styles.field}>
+        <ItemSearchInput selectedItem={selectedItem} onSelect={setSelectedItem} />
+      </div>
 
-      <label>
+      <label className={styles.field}>
         Notes
-        <textarea value={notes} onChange={(event) => setNotes(event.target.value)} />
+        <textarea
+          value={notes}
+          onChange={(event) => setNotes(event.target.value)}
+        />
       </label>
 
-      <button type="submit">{submitLabel}</button>
+      <button type="submit" className={styles.submitButton}>
+        {submitLabel}
+      </button>
     </form>
   );
 }

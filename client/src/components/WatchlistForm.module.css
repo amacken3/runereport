@@ -1,0 +1,35 @@
+.form {
+  display: grid;
+  gap: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--text-soft);
+  font-weight: 800;
+}
+
+.field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.submitButton {
+  width: fit-content;
+}
+
+.errorMessage {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  color: #ffd6d1;
+  background: rgba(184, 87, 77, 0.16);
+  border: 1px solid var(--red);
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 560px) {
+  .submitButton {
+    width: 100%;
+  }
+}
