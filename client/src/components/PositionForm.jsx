@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import ItemSearchInput from "./ItemSearchInput";
+import styles from "./PositionForm.module.css";
 
 const emptyForm = {
   quantity: "",
@@ -61,12 +62,14 @@ function PositionForm({ initialValues = {}, onSubmit, submitLabel }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      {error && <p>{error}</p>}
+    <form className={styles.form} onSubmit={handleSubmit}>
+      {error && <p className={styles.errorMessage}>{error}</p>}
 
-      <ItemSearchInput selectedItem={selectedItem} onSelect={setSelectedItem} />
+      <div className={styles.field}>
+        <ItemSearchInput selectedItem={selectedItem} onSelect={setSelectedItem} />
+      </div>
 
-      <label>
+      <label className={styles.field}>
         Quantity
         <input
           name="quantity"
@@ -77,7 +80,7 @@ function PositionForm({ initialValues = {}, onSubmit, submitLabel }) {
         />
       </label>
 
-      <label>
+      <label className={styles.field}>
         Buy Price
         <input
           name="buy_price"
@@ -88,7 +91,7 @@ function PositionForm({ initialValues = {}, onSubmit, submitLabel }) {
         />
       </label>
 
-      <label>
+      <label className={styles.field}>
         Notes
         <textarea
           name="notes"
@@ -97,7 +100,9 @@ function PositionForm({ initialValues = {}, onSubmit, submitLabel }) {
         />
       </label>
 
-      <button type="submit">{submitLabel}</button>
+      <button type="submit" className={styles.submitButton}>
+        {submitLabel}
+      </button>
     </form>
   );
 }
