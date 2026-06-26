@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import MarketMoverCard from "../components/MarketMoverCard";
 import useMarketMovers from "../hooks/useMarketMovers";
+import styles from "./DashboardPage.module.css";
 
 function getLastUpdatedText(lastUpdated, now) {
   if (!lastUpdated) {
@@ -36,56 +37,78 @@ function DashboardPage() {
 
   if (loading) {
     return (
-      <main className="page">
-        <h1>Dashboard</h1>
-        <p>Loading market movers...</p>
+      <main className={styles.page}>
+        <section className={styles.statusCard}>
+          <h1>Dashboard</h1>
+          <p>Loading market movers...</p>
+        </section>
       </main>
     );
   }
 
   if (error) {
     return (
-      <main className="page">
-        <h1>Dashboard</h1>
-        <p>{error}</p>
+      <main className={styles.page}>
+        <section className={styles.statusCard}>
+          <h1>Dashboard</h1>
+          <p className={styles.errorMessage}>{error}</p>
+        </section>
       </main>
     );
   }
 
   return (
-    <main className="page">
-      <section>
+    <main className={styles.page}>
+      <section className={styles.header}>
+        <p className={styles.eyebrow}>Live Grand Exchange movement</p>
+
         <h1>Market Dashboard</h1>
-        <p>
+
+        <p className={styles.description}>
           Items with the largest price movement compared to recent hourly market
           data.
         </p>
-        <p>{getLastUpdatedText(lastUpdated, now)}</p>
+
+        <p className={styles.updatedText}>
+          {getLastUpdatedText(lastUpdated, now)}
+        </p>
       </section>
 
-      <section>
-        <h2>Top Gainers</h2>
+      <div className={styles.moverGrid}>
+        <section className={styles.moverSection}>
+          <div className={styles.sectionHeader}>
+            <h2>Top Gainers</h2>
+            <span className={styles.gainerBadge}>Rising</span>
+          </div>
 
-        {topMovers.top_gainers.length === 0 ? (
-          <p>No top gainers found.</p>
-        ) : (
-          topMovers.top_gainers.map((mover) => (
-            <MarketMoverCard key={mover.item_id} mover={mover} />
-          ))
-        )}
-      </section>
+          <div className={styles.cardList}>
+            {topMovers.top_gainers.length === 0 ? (
+              <p className={styles.emptyText}>No top gainers found.</p>
+            ) : (
+              topMovers.top_gainers.map((mover) => (
+                <MarketMoverCard key={mover.item_id} mover={mover} />
+              ))
+            )}
+          </div>
+        </section>
 
-      <section>
-        <h2>Top Losers</h2>
+        <section className={styles.moverSection}>
+          <div className={styles.sectionHeader}>
+            <h2>Top Losers</h2>
+            <span className={styles.loserBadge}>Falling</span>
+          </div>
 
-        {topMovers.top_losers.length === 0 ? (
-          <p>No top losers found.</p>
-        ) : (
-          topMovers.top_losers.map((mover) => (
-            <MarketMoverCard key={mover.item_id} mover={mover} />
-          ))
-        )}
-      </section>
+          <div className={styles.cardList}>
+            {topMovers.top_losers.length === 0 ? (
+              <p className={styles.emptyText}>No top losers found.</p>
+            ) : (
+              topMovers.top_losers.map((mover) => (
+                <MarketMoverCard key={mover.item_id} mover={mover} />
+              ))
+            )}
+          </div>
+        </section>
+      </div>
     </main>
   );
 }

@@ -40,7 +40,7 @@ function Navbar() {
             className={styles.navButton}
             onClick={handleLogout}
           >
-            Logout {user?.username ? `(${user.username})` : ""}
+            Logout {user?.username ? `${user.username}` : ""}
           </button>
         )}
       </nav>

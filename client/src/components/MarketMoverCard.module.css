@@ -1,0 +1,121 @@
+.card {
+  display: flex;
+  gap: 0.9rem;
+  padding: 1rem;
+  background:
+    linear-gradient(180deg, rgba(27, 38, 25, 0.96), rgba(13, 18, 14, 0.96));
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-small);
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-gold-soft);
+  box-shadow: var(--shadow-card);
+}
+
+.iconWrap {
+  display: grid;
+  place-items: center;
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  background: rgba(200, 155, 60, 0.08);
+  border: 1px solid var(--border-gold-soft);
+  border-radius: var(--radius-md);
+}
+
+.iconWrap img {
+  image-rendering: auto;
+  object-fit: contain;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.topRow h3 {
+  margin: 0;
+  color: var(--gold-light);
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.price {
+  margin: 0 0 0.35rem;
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.movementText {
+  margin: 0 0 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.positiveChange,
+.negativeChange {
+  margin: 0;
+  font-weight: 800;
+}
+
+.positiveChange {
+  color: #d9ffd4;
+}
+
+.negativeChange {
+  color: #ffd6d1;
+}
+
+.positiveBadge,
+.negativeBadge {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.positiveBadge {
+  color: #d9ffd4;
+  background: rgba(95, 159, 84, 0.14);
+  border: 1px solid var(--green);
+}
+
+.negativeBadge {
+  color: #ffd6d1;
+  background: rgba(184, 87, 77, 0.14);
+  border: 1px solid var(--red);
+}
+
+@media (max-width: 520px) {
+  .card {
+    align-items: flex-start;
+  }
+
+  .iconWrap {
+    flex-basis: 48px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .topRow {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+}
