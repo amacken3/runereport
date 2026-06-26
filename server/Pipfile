@@ -16,6 +16,7 @@ requests = "*"
 pandas = "*"
 marshmallow = "*"
 openai = "*"
+gunicorn = "*"
 
 [dev-packages]
 pytest = "*"
