@@ -1,0 +1,207 @@
+.card {
+  position: relative;
+  padding: 1.15rem;
+  background:
+    linear-gradient(180deg, rgba(27, 38, 25, 0.96), rgba(13, 18, 14, 0.96));
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-small);
+}
+
+.topActions {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 2;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 999px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cardHeader h3 {
+  margin: 0;
+  color: var(--gold-light);
+}
+
+.mainRow {
+  display: flex;
+  gap: 1rem;
+  padding-right: 5.5rem;
+}
+
+.iconWrap {
+  display: grid;
+  place-items: center;
+  flex: 0 0 58px;
+  width: 58px;
+  height: 58px;
+  background: rgba(200, 155, 60, 0.08);
+  border: 1px solid var(--border-gold-soft);
+  border-radius: var(--radius-md);
+}
+
+.iconWrap img {
+  object-fit: contain;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.content h3 {
+  margin: 0 0 0.75rem;
+  color: var(--gold-light);
+  font-size: 1.25rem;
+}
+
+.marketGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.marketGrid p {
+  margin: 0;
+  padding: 0.75rem;
+  background: rgba(8, 11, 8, 0.42);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.marketGrid span {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.movementText {
+  color: var(--text-main) !important;
+}
+
+.positive {
+  color: #d9ffd4 !important;
+}
+
+.negative {
+  color: #ffd6d1 !important;
+}
+
+.notes {
+  margin: 0.85rem 0 0;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+
+.loadingText {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.successMessage,
+.errorMessage {
+  margin: 0.85rem 0 0;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+}
+
+.successMessage {
+  color: #d9ffd4;
+  background: rgba(95, 159, 84, 0.16);
+  border: 1px solid var(--green);
+}
+
+.errorMessage {
+  color: #ffd6d1;
+  background: rgba(184, 87, 77, 0.16);
+  border: 1px solid var(--red);
+}
+
+.positionForm {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-dark);
+}
+
+.positionForm h4 {
+  margin: 0;
+  color: var(--gold-light);
+}
+
+.positionForm label {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.positionForm textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.secondaryButton {
+  color: var(--gold-light);
+  background: rgba(200, 155, 60, 0.08);
+  border-color: var(--border-gold-soft);
+}
+
+.bottomActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.deleteButton {
+  color: #ffd6d1;
+  background: rgba(184, 87, 77, 0.16);
+  border-color: var(--red);
+}
+
+@media (max-width: 650px) {
+  .mainRow {
+    align-items: flex-start;
+    padding-right: 0;
+    padding-top: 2.75rem;
+  }
+
+  .marketGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formActions,
+  .bottomActions {
+    flex-direction: column;
+  }
+
+  .formActions button,
+  .bottomActions button {
+    width: 100%;
+  }
+}

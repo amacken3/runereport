@@ -1,0 +1,123 @@
+.page {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 3rem 0;
+}
+
+.header,
+.addSection,
+.watchlistSection,
+.statusCard {
+  background:
+    linear-gradient(180deg, rgba(34, 48, 31, 0.96), rgba(18, 26, 18, 0.98));
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.header {
+  margin-bottom: 1.25rem;
+  padding: 2rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--gold-light);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.header h1 {
+  margin: 0 0 0.75rem;
+  color: var(--gold-light);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1;
+  text-shadow: 3px 3px 0 #000;
+}
+
+.header p,
+.sectionHeader p,
+.statusCard p {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+.addSection,
+.watchlistSection,
+.statusCard {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sectionHeader h2 {
+  margin: 0 0 0.35rem;
+  color: var(--gold-light);
+}
+
+.formWrap {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-dark);
+}
+
+.cardGrid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.emptyText {
+  margin: 1rem 0 0;
+  color: var(--text-muted);
+}
+
+.errorMessage {
+  margin: 1rem 0;
+  padding: 0.85rem 1rem;
+  color: #ffd6d1;
+  background: rgba(184, 87, 77, 0.16);
+  border: 1px solid var(--red);
+  border-radius: var(--radius-sm);
+}
+
+.statusCard {
+  padding: 2rem;
+}
+
+.statusCard h1 {
+  margin: 0 0 0.75rem;
+  color: var(--gold-light);
+}
+
+@media (max-width: 700px) {
+  .page {
+    width: min(100% - 1rem, 1180px);
+    padding-top: 1.5rem;
+  }
+
+  .header,
+  .addSection,
+  .watchlistSection,
+  .statusCard {
+    padding: 1rem;
+  }
+
+  .sectionHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .sectionHeader button {
+    width: 100%;
+  }
+}
