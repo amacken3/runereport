@@ -1,0 +1,106 @@
+.searchWrap {
+  position: relative;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--text-soft);
+  font-weight: 800;
+}
+
+.resultsList {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: grid;
+  gap: 0.35rem;
+  max-height: 320px;
+  margin: 0;
+  padding: 0.5rem;
+  overflow-y: auto;
+  list-style: none;
+  background:
+    linear-gradient(180deg, rgba(27, 38, 25, 0.98), rgba(13, 18, 14, 0.98));
+  border: 1px solid var(--border-gold-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.resultButton {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0.55rem 0.65rem;
+  color: var(--text-main);
+  background: rgba(8, 11, 8, 0.35);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+  text-align: left;
+}
+
+.resultButton:hover {
+  color: var(--gold-light);
+  background: rgba(200, 155, 60, 0.1);
+  border-color: var(--border-gold-soft);
+}
+
+.itemIcon,
+.iconFallback {
+  display: grid;
+  place-items: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.itemIcon {
+  object-fit: contain;
+}
+
+.iconFallback {
+  color: var(--gold-light);
+  background: rgba(200, 155, 60, 0.08);
+  border: 1px solid var(--border-gold-soft);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+}
+
+.selectedItem {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.65rem;
+  background: rgba(95, 159, 84, 0.12);
+  border: 1px solid var(--green);
+  border-radius: var(--radius-md);
+}
+
+.selectedItem p {
+  margin: 0;
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.selectedItem span {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.errorMessage {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  color: #ffd6d1;
+  background: rgba(184, 87, 77, 0.16);
+  border: 1px solid var(--red);
+  border-radius: var(--radius-sm);
+}
