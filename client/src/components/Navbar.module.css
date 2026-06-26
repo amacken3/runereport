@@ -1,0 +1,94 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  background:
+    linear-gradient(180deg, rgba(34, 48, 31, 0.98), rgba(16, 23, 15, 0.98));
+  border-bottom: 2px solid var(--border-gold);
+  box-shadow: 0 5px 22px rgba(0, 0, 0, 0.45);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--gold-light);
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.brand::before {
+  content: "";
+  width: 0.85rem;
+  height: 0.85rem;
+  background: var(--gold);
+  border: 1px solid var(--gold-light);
+  transform: rotate(45deg);
+  box-shadow: 0 0 10px rgba(227, 193, 111, 0.45);
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.navLinks a,
+.navLinks button {
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.65rem;
+  color: var(--text-soft);
+  background: transparent;
+  box-shadow: none;
+  font-weight: 700;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.navLinks a:hover,
+.navLinks button:hover {
+  color: var(--gold-light);
+  background: rgba(200, 155, 60, 0.08);
+  border-color: var(--border-gold-soft);
+  transform: translateY(-1px);
+}
+
+.navLinks a.active {
+  color: var(--gold-light);
+  background: rgba(200, 155, 60, 0.12);
+  border-color: var(--border-gold-soft);
+}
+
+.navButton {
+  color: var(--text-soft);
+}
+
+.userBadge {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 760px) {
+  .navbar {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .navLinks {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+}

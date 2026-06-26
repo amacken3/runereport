@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
+import styles from "./Navbar.module.css";
 
 function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
@@ -12,12 +13,12 @@ function Navbar() {
   }
 
   return (
-    <header className="navbar">
-      <NavLink to="/" className="brand">
+    <header className={styles.navbar}>
+      <NavLink to="/" className={styles.brand}>
         RuneReport
       </NavLink>
 
-      <nav className="nav-links">
+      <nav className={styles.navLinks}>
         {isAuthenticated && (
           <>
             <NavLink to="/dashboard">Dashboard</NavLink>
@@ -34,7 +35,11 @@ function Navbar() {
         )}
 
         {isAuthenticated && (
-          <button type="button" className="nav-button" onClick={handleLogout}>
+          <button
+            type="button"
+            className={styles.navButton}
+            onClick={handleLogout}
+          >
             Logout {user?.username ? `(${user.username})` : ""}
           </button>
         )}
