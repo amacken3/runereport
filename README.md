@@ -4,6 +4,14 @@ RuneReport is a full-stack OSRS Grand Exchange market analysis app. Users can si
 
 The app helps users track items they have bought, estimate current profit or loss after Grand Exchange tax, monitor market movement, and generate plain-English market analysis summaries.
 
+## Links
+
+* **Deployed Frontend:** https://runereport-client.onrender.com
+* **Deployed Backend:** https://runereport.onrender.com
+* **GitHub Repository:** https://github.com/amacken3/runereport
+
+
+
 ## Features
 
 * User signup, login, logout, and protected routes
