@@ -1,19 +1,21 @@
+import os
 import requests
 
 from services.cache import get_from_cache, save_to_cache
 
 
 BASE_URL = "https://prices.runescape.wiki/api/v1/osrs"
+CONTACT_EMAIL = os.getenv("OSRS_API_CONTACT_EMAIL", "contact@example.com")
 
 HEADERS = {
-    "User-Agent": "RuneReport - OSRS market tracking app - aengus.2000@gmail.com"
+    "User-Agent": f"RuneReport - OSRS market tracking app - {CONTACT_EMAIL}"
 }
 
 
 def get_cached_data(cache_key, endpoint, ttl_seconds=60):
     cached_data = get_from_cache(cache_key, ttl_seconds)
 
-    if cached_data:
+    if cached_data is not None:
         return cached_data
 
     response = requests.get(
