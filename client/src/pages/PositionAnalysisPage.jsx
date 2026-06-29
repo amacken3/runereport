@@ -239,7 +239,7 @@ function PositionAnalysisPage() {
         <section className={styles.panel}>
           <div className={styles.sectionHeader}>
             <h2>Long-Term Trend</h2>
-            <p>Historical movement based on the 24-hour time series endpoint.</p>
+            <p>365 day time period.</p>
           </div>
 
           <div className={styles.statGrid}>
