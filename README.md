@@ -401,8 +401,9 @@ Possible future improvements for RuneReport include:
 * Improve mobile responsiveness and add additional UI polish
 * Add more backend tests for authentication, protected resources, and market analysis calculations
 
-## Lessons Learned
+## Project Reflection
 
-One important lesson from this project was the value of keeping pull requests small and focused. During the styling phase, a large CSS update was merged into `main`, which made the pull request harder to review and reason about. In a future project, I would split large frontend changes into smaller pull requests, such as one for global styling, one for shared components, and separate ones for each major page.
+One key takeaway from this project was the importance of keeping pull requests small, focused, and easy to review. During the styling phase, a large CSS update was merged into `main`, which made the changes harder to review and reason about as a single pull request.
 
-This would make the review process cleaner, reduce the risk of accidentally changing unrelated code, and make it easier to track the purpose of each change.
+In future projects, I would split larger frontend updates into smaller, more targeted pull requests. For example, global styling, shared components, and major page-specific changes could each be handled separately. This would make the review process cleaner, reduce the risk of unrelated changes being introduced, and make it easier to track the purpose of each update.
+
